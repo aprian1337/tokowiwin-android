@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        addFragment(HomeFragment())
         binding.navView.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.nav_home->{

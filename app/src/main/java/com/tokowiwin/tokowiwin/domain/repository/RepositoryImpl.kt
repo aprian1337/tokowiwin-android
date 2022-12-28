@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.tokowiwin.tokowiwin.data.NetworkDataSource
 import com.tokowiwin.tokowiwin.data.Resource
+import com.tokowiwin.tokowiwin.data.remote.response.ChangePassResponse
 import com.tokowiwin.tokowiwin.data.remote.response.LoginResponse
+import com.tokowiwin.tokowiwin.data.remote.response.ProductsResponse
 import com.tokowiwin.tokowiwin.data.remote.response.RegisterResponse
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -34,6 +36,34 @@ class RepositoryImpl @Inject constructor(
         GlobalScope.launch {
             networkDataSource.register(name, username, password, object : NetworkDataSource.RegisterCallback {
                 override fun onResultReceived(results: Resource<RegisterResponse>) {
+                    result.postValue(results.data!!)
+                }
+            })
+        }
+        return result
+    }
+
+    override fun changePass(
+        email: String,
+        oldPass: String,
+        newPass: String
+    ): LiveData<ChangePassResponse> {
+        val result = MutableLiveData<ChangePassResponse>()
+        GlobalScope.launch {
+            networkDataSource.changePass(email, oldPass, newPass, object : NetworkDataSource.ChangePassCallback {
+                override fun onResultReceived(results: Resource<ChangePassResponse>) {
+                    result.postValue(results.data!!)
+                }
+            })
+        }
+        return result
+    }
+
+    override fun getProducts(): LiveData<ProductsResponse> {
+        val result = MutableLiveData<ProductsResponse>()
+        GlobalScope.launch {
+            networkDataSource.getProducts(object : NetworkDataSource.ProductsCallback {
+                override fun onResultReceived(results: Resource<ProductsResponse>) {
                     result.postValue(results.data!!)
                 }
             })
