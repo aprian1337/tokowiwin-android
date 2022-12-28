@@ -7,6 +7,8 @@
         <entry key="app/src/main/res/drawable/bottom_nav_color.xml" value="0.379" />
         <entry key="app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.379" />
         <entry key="app/src/main/res/drawable/navmenu_style.xml" value="0.379" />
+        <entry key="app/src/main/res/drawable/rounded_bg.xml" value="0.241" />
+        <entry key="app/src/main/res/layout/activity_cart.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_change_pass.xml" value="0.256838905775076" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.5153985507246377" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
@@ -14,6 +16,7 @@
         <entry key="app/src/main/res/layout/fragment_account.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_change_pass.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/list_carts.xml" value="0.33" />
         <entry key="app/src/main/res/layout/list_products.xml" value="0.656671664167916" />
         <entry key="app/src/main/res/menu/nav_menu.xml" value="0.5270833333333333" />
       </map>
