@@ -7,9 +7,10 @@ import com.tokowiwin.tokowiwin.utils.AuthType
 class UserPreference(context: Context) {
     companion object {
         private const val PREFS_NAME = "user_pref"
-        private const val IS_LOGIN = "is_login"
         private const val ID = "id"
+        private const val IS_LOGIN = "is_login"
         private const val FULLNAME = "fullname"
+        private const val EMAIL = "email"
     }
 
     private val preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -20,11 +21,13 @@ class UserPreference(context: Context) {
             AuthType.LOGIN -> {
                 editor.putString(ID, user?.id.toString())
                 editor.putString(FULLNAME, user?.fullname)
+                editor.putString(EMAIL, user?.email)
                 editor.putBoolean(IS_LOGIN, true)
                 editor.apply()
             }
             AuthType.LOGOUT -> {
                 editor.putString(ID, null)
+                editor.putString(EMAIL, null)
                 editor.putString(FULLNAME, null)
                 editor.putBoolean(IS_LOGIN, false)
                 editor.apply()
@@ -35,6 +38,7 @@ class UserPreference(context: Context) {
     fun getUser(): SessionLogin = SessionLogin(
         preferences.getString(ID, ""),
         preferences.getString(FULLNAME, ""),
+        preferences.getString(EMAIL, ""),
         preferences.getBoolean(IS_LOGIN, false)
     )
 
