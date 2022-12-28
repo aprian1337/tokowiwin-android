@@ -1,4 +1,4 @@
-package com.tokowiwin.tokowiwin.ui.home
+package com.tokowiwin.tokowiwin.ui.cart
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -6,17 +6,21 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tokowiwin.tokowiwin.R
+import com.tokowiwin.tokowiwin.data.remote.response.CartsDataItem
 import com.tokowiwin.tokowiwin.data.remote.response.ProductsDataItem
+import com.tokowiwin.tokowiwin.databinding.ListCartsBinding
 import com.tokowiwin.tokowiwin.databinding.ListProductsBinding
+import com.tokowiwin.tokowiwin.ui.home.HomeAdapter
+import com.tokowiwin.tokowiwin.utils.Method
 
-class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.ListViewHolder>() {
-    inner class ListViewHolder (val binding: ListProductsBinding) : RecyclerView.ViewHolder(binding.root)
+class CartAdapter() : RecyclerView.Adapter<CartAdapter.ListViewHolder>() {
+    inner class ListViewHolder (val binding: ListCartsBinding) : RecyclerView.ViewHolder(binding.root)
 
-    private var data = mutableListOf<ProductsDataItem>()
+    private var data = mutableListOf<CartsDataItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         return ListViewHolder(
-            ListProductsBinding.inflate(
+            ListCartsBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -25,7 +29,7 @@ class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.ListViewHolder>() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(list: List<ProductsDataItem>){
+    fun setData(list: List<CartsDataItem>){
         data.clear()
         data = list.toMutableList()
         notifyDataSetChanged()
@@ -35,7 +39,8 @@ class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.ListViewHolder>() {
         val temp = data[position]
         holder.binding.txtProductName.text = temp.productName.toString()
         holder.binding.txtPrice.text = temp.productPrice.toString()
-        holder.binding.txtStock.text = "Stock : ${temp.productStock.toString()}"
+        holder.binding.txtTotalItemPrice.text = temp.productPrice.toString()
+        holder.binding.txtQty.setText(temp.qty.toString())
         if(temp.productPic!=""){
             Glide.with(holder.itemView.context)
                 .load(temp.productPic)
@@ -46,12 +51,8 @@ class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.ListViewHolder>() {
                 .into(holder.binding.imgProduct)
         }
 
-        holder.binding.btnTambahKeranjang.setOnClickListener {
-            var qty = 0
-            if (holder.binding.txtQty.text.toString() != "") {
-                qty = Integer.parseInt(holder.binding.txtQty.text.toString())
-            }
-            setOnItemClickCallback?.onItemClicked(temp, qty)
+        holder.binding.txtHapus.setOnClickListener {
+            setOnItemClickCallback?.onItemClicked(temp, Method.DELETE)
         }
     }
 
@@ -62,7 +63,7 @@ class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.ListViewHolder>() {
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: ProductsDataItem, qty: Int)
+        fun onItemClicked(data: CartsDataItem, type: Method)
     }
 
     override fun getItemCount(): Int {

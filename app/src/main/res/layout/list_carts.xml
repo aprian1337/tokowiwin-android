@@ -59,46 +59,52 @@
                 app:layout_constraintStart_toStartOf="@+id/txt_product_name"
                 app:layout_constraintTop_toBottomOf="@+id/txt_product_name" />
 
-            <TextView
-                android:id="@+id/txt_stock"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Stock : 500"
-                android:layout_marginTop="5dp"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/txt_price"
-                app:layout_constraintTop_toBottomOf="@+id/txt_price" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/filledTextField"
                 style="@style/MyDenseOutlined"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="5dp"
                 android:hint="@string/qty"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/txt_stock"
-                app:layout_constraintTop_toBottomOf="@+id/txt_stock">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/txt_qty"
-                        android:textSize="14sp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                app:layout_constraintStart_toStartOf="@+id/txt_price"
+                app:layout_constraintTop_toBottomOf="@+id/txt_price">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_qty"
+                    android:textSize="14sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
-                android:id="@+id/btn_tambah_keranjang"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="@string/tambahkan_keranjang"
-                android:layout_marginTop="5dp"
+            <TextView
+                android:id="@+id/txt_total_item_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginRight="10dp"
+                android:text="Rp250.000"
+                android:background="@drawable/rounded_bg"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/filledTextField"
                 app:layout_constraintTop_toBottomOf="@+id/filledTextField" />
+
+            <TextView
+                android:id="@+id/txt_hapus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/hapus_keranjang"
+                android:textColor="@color/gray"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/txt_total_item_price"
+                app:layout_constraintTop_toBottomOf="@+id/txt_total_item_price" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

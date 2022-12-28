@@ -4,10 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.tokowiwin.tokowiwin.data.NetworkDataSource
 import com.tokowiwin.tokowiwin.data.Resource
-import com.tokowiwin.tokowiwin.data.remote.response.ChangePassResponse
-import com.tokowiwin.tokowiwin.data.remote.response.LoginResponse
-import com.tokowiwin.tokowiwin.data.remote.response.ProductsResponse
-import com.tokowiwin.tokowiwin.data.remote.response.RegisterResponse
+import com.tokowiwin.tokowiwin.data.remote.response.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -68,5 +65,42 @@ class RepositoryImpl @Inject constructor(
                 }
             })
         }
-        return result    }
+        return result
+    }
+
+    override fun addCart(userId: Int, productId: Int, qty: Int): LiveData<AddCartResponse> {
+        val result = MutableLiveData<AddCartResponse>()
+        GlobalScope.launch {
+            networkDataSource.addCart(userId, productId, qty, object : NetworkDataSource.AddCartCallback {
+                override fun onResultReceived(results: Resource<AddCartResponse>) {
+                    result.postValue(results.data!!)
+                }
+            })
+        }
+        return result
+    }
+
+    override fun carts(userId: Int): LiveData<CartsResponse> {
+        val result = MutableLiveData<CartsResponse>()
+        GlobalScope.launch {
+            networkDataSource.carts(userId, object : NetworkDataSource.CartsCallback {
+                override fun onResultReceived(results: Resource<CartsResponse>) {
+                    result.postValue(results.data!!)
+                }
+            })
+        }
+        return result
+    }
+
+    override fun deleteCart(userId: Int, productId: Int): LiveData<DeleteCartResponse> {
+        val result = MutableLiveData<DeleteCartResponse>()
+        GlobalScope.launch {
+            networkDataSource.deleteCart(userId, productId, object : NetworkDataSource.DeleteCartCallback {
+                override fun onResultReceived(results: Resource<DeleteCartResponse>) {
+                    result.postValue(results.data!!)
+                }
+            })
+        }
+        return result
+    }
 }

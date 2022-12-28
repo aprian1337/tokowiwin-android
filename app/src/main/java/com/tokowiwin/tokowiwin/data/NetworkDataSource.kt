@@ -1,13 +1,8 @@
 package com.tokowiwin.tokowiwin.data
 
 import com.tokowiwin.tokowiwin.data.remote.ApiService
-import com.tokowiwin.tokowiwin.data.remote.request.ChangePassRequest
-import com.tokowiwin.tokowiwin.data.remote.request.LoginRequest
-import com.tokowiwin.tokowiwin.data.remote.request.RegisterRequest
-import com.tokowiwin.tokowiwin.data.remote.response.ChangePassResponse
-import com.tokowiwin.tokowiwin.data.remote.response.LoginResponse
-import com.tokowiwin.tokowiwin.data.remote.response.ProductsResponse
-import com.tokowiwin.tokowiwin.data.remote.response.RegisterResponse
+import com.tokowiwin.tokowiwin.data.remote.request.*
+import com.tokowiwin.tokowiwin.data.remote.response.*
 import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Named
@@ -70,6 +65,41 @@ class NetworkDataSource @Inject constructor(
         }
     }
 
+    suspend fun addCart(userId: Int, productId: Int, qty: Int, callback: AddCartCallback) {
+        val response = resultApi.addCart(AddCartRequest(
+            userId, productId, qty
+        ))
+        try {
+            response.let { result->
+                callback.onResultReceived(Resource.Success(result))
+            }
+        } catch (e: HttpException) {
+            Resource.Error(e.message(), null)
+        }
+    }
+
+    suspend fun carts(userId: Int, callback: CartsCallback) {
+        val response = resultApi.carts(userId)
+        try {
+            response.let { result->
+                callback.onResultReceived(Resource.Success(result))
+            }
+        } catch (e: HttpException) {
+            Resource.Error(e.message(), null)
+        }
+    }
+
+    suspend fun deleteCart(userId: Int, productId: Int, callback: DeleteCartCallback) {
+        val response = resultApi.deleteCart(userId, productId)
+        try {
+            response.let { result->
+                callback.onResultReceived(Resource.Success(result))
+            }
+        } catch (e: HttpException) {
+            Resource.Error(e.message(), null)
+        }
+    }
+
     interface LoginCallback {
         fun onResultReceived(results: Resource<LoginResponse>)
     }
@@ -84,5 +114,17 @@ class NetworkDataSource @Inject constructor(
 
     interface ProductsCallback {
         fun onResultReceived(results: Resource<ProductsResponse>)
+    }
+
+    interface AddCartCallback {
+        fun onResultReceived(results: Resource<AddCartResponse>)
+    }
+
+    interface CartsCallback {
+        fun onResultReceived(results: Resource<CartsResponse>)
+    }
+
+    interface DeleteCartCallback {
+        fun onResultReceived(results: Resource<DeleteCartResponse>)
     }
 }

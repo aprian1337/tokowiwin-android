@@ -1,12 +1,8 @@
 package com.tokowiwin.tokowiwin.data.remote
 
-import com.tokowiwin.tokowiwin.data.remote.request.ChangePassRequest
-import com.tokowiwin.tokowiwin.data.remote.request.LoginRequest
-import com.tokowiwin.tokowiwin.data.remote.request.RegisterRequest
-import com.tokowiwin.tokowiwin.data.remote.response.ChangePassResponse
-import com.tokowiwin.tokowiwin.data.remote.response.LoginResponse
-import com.tokowiwin.tokowiwin.data.remote.response.ProductsResponse
-import com.tokowiwin.tokowiwin.data.remote.response.RegisterResponse
+import com.tokowiwin.tokowiwin.data.NetworkDataSource
+import com.tokowiwin.tokowiwin.data.remote.request.*
+import com.tokowiwin.tokowiwin.data.remote.response.*
 import retrofit2.http.*
 
 interface ApiService {
@@ -28,4 +24,19 @@ interface ApiService {
 
     @GET("/products")
     suspend fun products() : ProductsResponse
+
+    @POST("/carts")
+    suspend fun addCart(
+        @Body req: AddCartRequest
+    ) : AddCartResponse
+
+    @GET("/carts")
+    suspend fun carts(
+        @Query("id") id : Int
+    ) : CartsResponse
+
+    @DELETE("/carts")
+    suspend fun deleteCart(
+        @Query("user_id") userId: Int, @Query("product_id") productId: Int
+    ) : DeleteCartResponse
 }

@@ -1,5 +1,6 @@
 package com.tokowiwin.tokowiwin.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,8 +10,10 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.tokowiwin.tokowiwin.data.local.UserPreference
 import com.tokowiwin.tokowiwin.data.remote.response.ProductsDataItem
 import com.tokowiwin.tokowiwin.databinding.FragmentHomeBinding
+import com.tokowiwin.tokowiwin.ui.cart.CartActivity
 import com.tokowiwin.tokowiwin.utils.ToastHelper
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,6 +34,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val userPreference = activity?.let { UserPreference(it) }
+        val user =  userPreference?.getUser()
         setupRv()
         showData()
         binding.searchProduct.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
@@ -45,6 +50,35 @@ class HomeFragment : Fragment() {
                 return false
             }
         })
+        adapter.setOnItemClickCallback(object : HomeAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: ProductsDataItem, qty: Int) {
+                if (qty == 0) {
+                    ToastHelper.showToast(requireContext(), "Qty tidak boleh kosong")
+                }else{
+                    if (qty > data.productStock!!) {
+                        ToastHelper.showToast(requireContext(), "Stock produk tidak tersedia dengan yang diminta")
+                    }else{
+                        val userId = user?.id?.let { Integer.parseInt(it) }
+                        val productId = data.id
+                        if (userId != null && productId != null) {
+                            viewModel.setAddCart(userId, productId, qty)
+                            viewModel.getAddCart().observe(viewLifecycleOwner) {
+                                if (it.errorMessage != "") {
+                                    it.errorMessage?.let { it1 -> ToastHelper.showToast(requireContext(), it1) }
+                                }else if(it.data?.success == 0) {
+                                    ToastHelper.showToast(requireContext(), it.data.message.toString())
+                                }else{
+                                    ToastHelper.showToast(requireContext(), "Berhasil menambahkan keranjang")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        binding.imgCart.setOnClickListener{
+            startActivity(Intent(activity, CartActivity::class.java))
+        }
     }
 
     private fun setupRv() {
@@ -54,21 +88,16 @@ class HomeFragment : Fragment() {
     }
 
     private fun showData(filter: String = "") {
-        Log.d("TAGFILTER", filter)
         viewModel.setProducts()
         viewModel.getProducts().observe(viewLifecycleOwner){
             if (it.errorMessage != "") {
                 it.errorMessage?.let { it1 -> ToastHelper.showToast(requireContext(), it1) }
             }else{
                 var tempData : ArrayList<ProductsDataItem> = arrayListOf()
-                Log.d("TAGFILTER", filter)
                 if (it?.data != null){
                     if (filter != "") {
                         for (item in it.data) {
-                            Log.d("TAGITEM", item.toString())
-                            Log.d("TAGIF", item?.productName!!.lowercase())
-                            if (item.productName.lowercase().contains(filter)) {
-                                Log.d("KETEMU", item.productName.lowercase())
+                            if (item?.productName?.lowercase()?.contains(filter) == true) {
                                 tempData.add(item)
                             }
                         }

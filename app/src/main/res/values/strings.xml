@@ -24,4 +24,8 @@
     <string name="kata_sandi_baru">Kata Sandi Baru</string>
     <string name="qty">Qty</string>
     <string name="tambahkan_keranjang">Tambahkan Keranjang</string>
+    <string name="keranjang">Keranjang</string>
+    <string name="total_tagihan">Total Tagihan</string>
+    <string name="pembayaran">Pembayaran</string>
+    <string name="hapus_keranjang">Hapus Keranjang</string>
 </resources>
