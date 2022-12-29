@@ -63,6 +63,9 @@ class RepositoryImpl @Inject constructor(
                 override fun onResultReceived(results: Resource<ProductsResponse>) {
                     result.postValue(results.data!!)
                 }
+
+                override fun onErrorReceived(results: Resource<Error>) {
+                }
             })
         }
         return result
@@ -97,6 +100,47 @@ class RepositoryImpl @Inject constructor(
         GlobalScope.launch {
             networkDataSource.deleteCart(userId, productId, object : NetworkDataSource.DeleteCartCallback {
                 override fun onResultReceived(results: Resource<DeleteCartResponse>) {
+                    result.postValue(results.data!!)
+                }
+            })
+        }
+        return result
+    }
+
+    override fun updateCart(userId: Int, productId: Int, qty: Int): LiveData<UpdateCartResponse> {
+        val result = MutableLiveData<UpdateCartResponse>()
+        GlobalScope.launch {
+            networkDataSource.updateCart(userId, productId, qty, object : NetworkDataSource.UpdateCartCallback {
+                override fun onResultReceived(results: Resource<UpdateCartResponse>) {
+                    result.postValue(results.data!!)
+                }
+            })
+        }
+        return result    }
+
+    override fun insertTransaction(
+        userId: Int,
+        receiverName: String,
+        receiverPhone: String,
+        receiverAddress: String,
+        paymentType: String
+    ): LiveData<InsertTransactionResponse> {
+        val result = MutableLiveData<InsertTransactionResponse>()
+        GlobalScope.launch {
+            networkDataSource.insertTransaction(userId, receiverName, receiverPhone, receiverAddress, paymentType, object : NetworkDataSource.InsertTransactionCallback {
+                override fun onResultReceived(results: Resource<InsertTransactionResponse>) {
+                    result.postValue(results.data!!)
+                }
+            })
+        }
+        return result
+    }
+
+    override fun transactions(userId: Int): LiveData<TransactionsResponse> {
+        val result = MutableLiveData<TransactionsResponse>()
+        GlobalScope.launch {
+            networkDataSource.transactions(userId, object : NetworkDataSource.TransactionsCallback {
+                override fun onResultReceived(results: Resource<TransactionsResponse>) {
                     result.postValue(results.data!!)
                 }
             })

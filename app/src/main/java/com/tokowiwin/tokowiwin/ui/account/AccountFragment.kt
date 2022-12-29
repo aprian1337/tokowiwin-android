@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.tokowiwin.tokowiwin.data.local.UserPreference
 import com.tokowiwin.tokowiwin.data.remote.response.LoginUser
 import com.tokowiwin.tokowiwin.databinding.FragmentAccountBinding
+import com.tokowiwin.tokowiwin.ui.cart.CartActivity
 import com.tokowiwin.tokowiwin.ui.changepass.ChangePassActivity
 import com.tokowiwin.tokowiwin.ui.login.LoginActivity
 import com.tokowiwin.tokowiwin.utils.AuthType
@@ -40,6 +41,11 @@ class AccountFragment : Fragment() {
                     userPreference?.setUser(LoginUser(), AuthType.LOGOUT)
                     startActivity(it)
                     activity?.finish()
+                }
+            }
+            b.imgCart.setOnClickListener{
+                Intent(activity, CartActivity::class.java).let {
+                    startActivity(it)
                 }
             }
         }

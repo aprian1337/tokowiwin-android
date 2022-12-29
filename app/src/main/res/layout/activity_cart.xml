@@ -44,16 +44,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txt_label" />
 
-    <ImageView
-        android:id="@+id/img_cart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/cart"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_products"
         android:layout_width="match_parent"
@@ -63,6 +53,7 @@
         tools:listitem="@layout/list_carts" />
 
     <Button
+        android:id="@+id/btn_pembayaran"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/pembayaran"
@@ -97,7 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="15dp"
-        android:text="Rp500.000"
+        android:text="@string/empty"
         android:textColor="@color/red"
         android:textSize="17sp"
         android:textStyle="bold"

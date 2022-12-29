@@ -28,4 +28,14 @@
     <string name="total_tagihan">Total Tagihan</string>
     <string name="pembayaran">Pembayaran</string>
     <string name="hapus_keranjang">Hapus Keranjang</string>
+    <string name="empty">-</string>
+    <string name="cash_on_delivery_cod">Cash On Delivery (COD)</string>
+    <string name="manual_transfer">Manual Transfer</string>
+    <string name="bayar">Bayar</string>
+    <string name="kembali">Kembali</string>
+    <string name="jenis_pembayaran">Jenis Pembayaran</string>
+    <string name="lihat_detail">Lihat Detail</string>
+    <string name="_1_september_2021_15_12_wib">1 September 2021, 15:12 WIB</string>
+    <string name="_5_produk_lainnya">5 produk lainnya</string>
+    <string name="riwayat_transaksi">Riwayat Transaksi</string>
 </resources>

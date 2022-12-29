@@ -11,4 +11,7 @@ interface Repository {
     fun addCart(userId: Int, productId: Int, qty: Int) : LiveData<AddCartResponse>
     fun carts(userId: Int) : LiveData<CartsResponse>
     fun deleteCart(userId: Int, productId: Int) : LiveData<DeleteCartResponse>
+    fun updateCart(userId: Int, productId: Int, qty: Int) : LiveData<UpdateCartResponse>
+    fun insertTransaction(userId: Int, receiverName: String, receiverPhone: String, receiverAddress: String, paymentType: String) : LiveData<InsertTransactionResponse>
+    fun transactions(userId: Int) : LiveData<TransactionsResponse>
 }
