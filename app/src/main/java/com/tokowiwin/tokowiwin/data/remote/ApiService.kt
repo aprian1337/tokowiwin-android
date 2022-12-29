@@ -39,4 +39,19 @@ interface ApiService {
     suspend fun deleteCart(
         @Query("user_id") userId: Int, @Query("product_id") productId: Int
     ) : DeleteCartResponse
+
+    @PUT("/carts")
+    suspend fun updateCart(
+        @Query("user_id") userId: Int, @Query("product_id") productId: Int, @Query("qty") qty: Int
+    ) : UpdateCartResponse
+
+    @POST("/transactions")
+    suspend fun insertTransaction(
+        @Body req: InsertTransactionRequest
+    ) : InsertTransactionResponse
+
+    @GET("/transactions")
+    suspend fun transactions(
+        @Query("user_id") userId: Int
+    ) : TransactionsResponse
 }
