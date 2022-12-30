@@ -47,12 +47,18 @@ class TransactionsFragment : Fragment(), View.OnClickListener {
                 adapter.setData(it?.data?.data as List<TransactionsDataItem>)
             }
         }
+
         binding.imgCart.setOnClickListener(this)
         adapter.setOnItemClickCallback(object: TransactionsAdapter.OnItemClickCallback {
             override fun onItemClicked(data: TransactionDetails) {
                 startActivity(
                     Intent(activity, DetailActivity::class.java).apply {
-//                        putParcelableArrayListExtra("", data)
+                        putParcelableArrayListExtra(DetailActivity.EXTRA_DETAIL_PRODUCTS, data.transactionProducts)
+                        putExtra(DetailActivity.EXTRA_DETAIL_ADDRESS, data.address)
+                        putExtra(DetailActivity.EXTRA_DETAIL_BILL, data.totalBill)
+                        putExtra(DetailActivity.EXTRA_DETAIL_NAME, data.receiverName)
+                        putExtra(DetailActivity.EXTRA_DETAIL_PHONE, data.receiverPhone)
+                        putExtra(DetailActivity.EXTRA_DETAIL_PAYMENT_TYPE, data.paymentType)
                     }
                 )
             }
