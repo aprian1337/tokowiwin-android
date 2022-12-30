@@ -21,7 +21,7 @@ data class TransactionsResponse(
 
 data class TransactionsData(
 	@field:SerializedName("data")
-	val data: List<TransactionsDataItem?>? = null
+	val data: ArrayList<TransactionsDataItem?>? = null
 )
 
 @Parcelize
@@ -36,14 +36,15 @@ data class TransactionDetails(
 	@field:SerializedName("receiver_name")
 	val receiverName: String? = null,
 
-	@field:SerializedName("transaction_products")
-	val transactionProducts: List<TransactionProductsItem?>? = null,
-
 	@field:SerializedName("receiver_phone")
 	val receiverPhone: String? = null,
 
 	@field:SerializedName("total_bill")
-	val totalBill: String? = null
+	val totalBill: String? = null,
+
+	@field:SerializedName("transaction_products")
+	val transactionProducts: ArrayList<TransactionProductsItem?>? = null
+
 ) : Parcelable
 
 @Parcelize
