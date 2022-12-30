@@ -1,6 +1,8 @@
 package com.tokowiwin.tokowiwin.data.remote.response
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 data class TransactionsResponse(
 
@@ -22,6 +24,7 @@ data class TransactionsData(
 	val data: List<TransactionsDataItem?>? = null
 )
 
+@Parcelize
 data class TransactionDetails(
 
 	@field:SerializedName("payment_type")
@@ -41,8 +44,9 @@ data class TransactionDetails(
 
 	@field:SerializedName("total_bill")
 	val totalBill: String? = null
-)
+) : Parcelable
 
+@Parcelize
 data class TransactionProductsItem(
 
 	@field:SerializedName("product_pic")
@@ -59,7 +63,7 @@ data class TransactionProductsItem(
 
 	@field:SerializedName("product_name")
 	val productName: String? = null
-)
+) : Parcelable
 
 data class TransactionsDataItem(
 
