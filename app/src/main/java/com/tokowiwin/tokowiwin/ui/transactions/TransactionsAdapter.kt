@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tokowiwin.tokowiwin.R
 import com.tokowiwin.tokowiwin.data.remote.response.ProductsDataItem
+import com.tokowiwin.tokowiwin.data.remote.response.TransactionDetails
 import com.tokowiwin.tokowiwin.data.remote.response.TransactionsDataItem
 import com.tokowiwin.tokowiwin.databinding.ListTransactionsBinding
 
@@ -46,6 +47,7 @@ class TransactionsAdapter() : RecyclerView.Adapter<TransactionsAdapter.ListViewH
                 .load(holder.binding.root.context.getDrawable(R.drawable.example))
                 .into(holder.binding.imgProduct)
         }
+        temp.transactionDetails?.let { setOnItemClickCallback?.onItemClicked(it) }
     }
 
     private var setOnItemClickCallback : OnItemClickCallback? = null
@@ -55,7 +57,7 @@ class TransactionsAdapter() : RecyclerView.Adapter<TransactionsAdapter.ListViewH
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: ProductsDataItem)
+        fun onItemClicked(data: TransactionDetails)
     }
 
     override fun getItemCount(): Int {

@@ -38,4 +38,8 @@
     <string name="_1_september_2021_15_12_wib">1 September 2021, 15:12 WIB</string>
     <string name="_5_produk_lainnya">5 produk lainnya</string>
     <string name="riwayat_transaksi">Riwayat Transaksi</string>
+    <string name="detail_transaksi">Detail Transaksi</string>
+    <string name="nama_penerima">Nama Penerima</string>
+    <string name="nomor_hp_penerima">Nomor HP Penerima</string>
+    <string name="alamat_pengiriman">Alamat Pengiriman</string>
 </resources>

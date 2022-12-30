@@ -10,9 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tokowiwin.tokowiwin.R
 import com.tokowiwin.tokowiwin.data.local.UserPreference
+import com.tokowiwin.tokowiwin.data.remote.response.TransactionDetails
 import com.tokowiwin.tokowiwin.data.remote.response.TransactionsDataItem
 import com.tokowiwin.tokowiwin.databinding.FragmentTransactionsBinding
 import com.tokowiwin.tokowiwin.ui.cart.CartActivity
+import com.tokowiwin.tokowiwin.ui.detail.DetailActivity
 import com.tokowiwin.tokowiwin.utils.ToastHelper
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -46,12 +48,23 @@ class TransactionsFragment : Fragment(), View.OnClickListener {
             }
         }
         binding.imgCart.setOnClickListener(this)
+        adapter.setOnItemClickCallback(object: TransactionsAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: TransactionDetails) {
+                startActivity(
+                    Intent(activity, DetailActivity::class.java).apply {
+//                        putParcelableArrayListExtra("", data)
+                    }
+                )
+            }
+        })
     }
 
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.img_cart -> {
-                startActivity(Intent(activity, CartActivity::class.java))
+                startActivity(
+                    Intent(activity, CartActivity::class.java)
+                )
             }
         }
     }

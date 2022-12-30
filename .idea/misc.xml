@@ -11,6 +11,7 @@
         <entry key="app/src/main/res/drawable/rounded_bg.xml" value="0.241" />
         <entry key="app/src/main/res/layout/activity_cart.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_change_pass.xml" value="0.256838905775076" />
+        <entry key="app/src/main/res/layout/activity_detail.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.5153985507246377" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.5" />
