@@ -3,6 +3,9 @@ package com.tokowiwin.tokowiwin.data.remote.request
 import com.google.gson.annotations.SerializedName
 
 data class InsertTransactionRequest(
+	@field:SerializedName("id")
+	val id: Long? = null,
+
 	@field:SerializedName("user_id")
 	val userId: Int? = null,
 

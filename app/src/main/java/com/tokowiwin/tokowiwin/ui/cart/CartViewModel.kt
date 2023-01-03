@@ -29,8 +29,8 @@ class CartViewModel @Inject constructor(private val repository: Repository)  : V
     }
     fun getUpdateCart() : LiveData<UpdateCartResponse> = resultUpdate
 
-    fun setInsertTransaction(userId: Int, receiverName: String, receiverPhone: String, receiverAddress: String, paymentType: String){
-        resultInsertTransaction = repository.insertTransaction(userId, receiverName, receiverPhone, receiverAddress, paymentType)
+    fun setInsertTransaction(id: Long, userId: Int, receiverName: String, receiverPhone: String, receiverAddress: String, paymentType: String){
+        resultInsertTransaction = repository.insertTransaction(id, userId, receiverName, receiverPhone, receiverAddress, paymentType)
     }
     fun getInsertTransaction() : LiveData<InsertTransactionResponse> = resultInsertTransaction
 }

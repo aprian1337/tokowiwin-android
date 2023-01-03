@@ -69,7 +69,7 @@ data class TransactionProductsItem(
 data class TransactionsDataItem(
 
 	@field:SerializedName("transaction_id")
-	val transactionId: Int? = null,
+	val transactionId: Long? = null,
 
 	@field:SerializedName("date")
 	val date: String? = null,

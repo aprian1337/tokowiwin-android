@@ -119,6 +119,7 @@ class RepositoryImpl @Inject constructor(
         return result    }
 
     override fun insertTransaction(
+        id: Long,
         userId: Int,
         receiverName: String,
         receiverPhone: String,
@@ -127,7 +128,7 @@ class RepositoryImpl @Inject constructor(
     ): LiveData<InsertTransactionResponse> {
         val result = MutableLiveData<InsertTransactionResponse>()
         GlobalScope.launch {
-            networkDataSource.insertTransaction(userId, receiverName, receiverPhone, receiverAddress, paymentType, object : NetworkDataSource.InsertTransactionCallback {
+            networkDataSource.insertTransaction(id, userId, receiverName, receiverPhone, receiverAddress, paymentType, object : NetworkDataSource.InsertTransactionCallback {
                 override fun onResultReceived(results: Resource<InsertTransactionResponse>) {
                     result.postValue(results.data!!)
                 }
