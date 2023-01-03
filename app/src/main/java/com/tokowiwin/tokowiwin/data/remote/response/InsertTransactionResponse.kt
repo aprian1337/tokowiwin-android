@@ -3,6 +3,7 @@ package com.tokowiwin.tokowiwin.data.remote.response
 import com.google.gson.annotations.SerializedName
 
 data class InsertTransactionResponse(
+
     @field:SerializedName("data")
     val data: InsertTransactionData? = null,
 
@@ -22,4 +23,10 @@ data class InsertTransactionData(
 
     @field:SerializedName("message")
     val message: String? = null,
+
+    @field:SerializedName("payment_type")
+    val paymentType: String? = null,
+
+    @field:SerializedName("id")
+    val id: Int? = null,
 )

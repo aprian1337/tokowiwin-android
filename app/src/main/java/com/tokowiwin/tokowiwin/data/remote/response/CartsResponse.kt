@@ -41,5 +41,8 @@ data class CartsData(
 	val data: List<CartsDataItem?>? = null,
 
 	@field:SerializedName("total_tagihan")
-	val totalTagihan: String? = null
+	val totalTagihan: String? = null,
+
+	@field:SerializedName("total_tagihan_numeric")
+	val totalTagihanNumeric: Int? = null
 )

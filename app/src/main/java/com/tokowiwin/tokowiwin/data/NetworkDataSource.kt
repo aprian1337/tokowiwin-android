@@ -110,10 +110,10 @@ class NetworkDataSource @Inject constructor(
         }
     }
 
-    suspend fun insertTransaction(userId: Int, receiverName: String, receiverPhone: String, receiverAddress: String, paymentType: String, callback: InsertTransactionCallback) {
+    suspend fun insertTransaction(id: Long, userId: Int, receiverName: String, receiverPhone: String, receiverAddress: String, paymentType: String, callback: InsertTransactionCallback) {
         try {
             val response = resultApi.insertTransaction(InsertTransactionRequest(
-                userId, receiverName, receiverPhone, receiverAddress, paymentType)
+               id, userId, receiverName, receiverPhone, receiverAddress, paymentType)
             )
             response.let { result->
                 callback.onResultReceived(Resource.Success(result))

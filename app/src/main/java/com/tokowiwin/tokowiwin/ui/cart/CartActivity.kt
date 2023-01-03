@@ -8,14 +8,27 @@ import android.view.View
 import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.midtrans.sdk.corekit.core.MidtransSDK
+import com.midtrans.sdk.corekit.core.TransactionRequest
+import com.midtrans.sdk.corekit.core.themes.CustomColorTheme
+import com.midtrans.sdk.corekit.models.BillingAddress
+import com.midtrans.sdk.corekit.models.CustomerDetails
+import com.midtrans.sdk.corekit.models.ShippingAddress
+import com.midtrans.sdk.corekit.models.snap.Authentication
+import com.midtrans.sdk.corekit.models.snap.CreditCard
+import com.midtrans.sdk.corekit.models.snap.TransactionResult
+import com.midtrans.sdk.uikit.SdkUIFlowBuilder
 import com.tokowiwin.tokowiwin.R
 import com.tokowiwin.tokowiwin.data.local.UserPreference
 import com.tokowiwin.tokowiwin.data.remote.response.CartsDataItem
+import com.tokowiwin.tokowiwin.data.remote.response.CartsResponse
 import com.tokowiwin.tokowiwin.databinding.ActivityCartBinding
 import com.tokowiwin.tokowiwin.ui.MainActivity
+import com.tokowiwin.tokowiwin.utils.Constants
 import com.tokowiwin.tokowiwin.utils.Method
 import com.tokowiwin.tokowiwin.utils.ToastHelper
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +48,10 @@ class CartActivity : AppCompatActivity(), View.OnClickListener, RadioGroup.OnChe
     private lateinit var radioPaymentType : RadioGroup
     private var paymentType = "COD"
     private var userId = 0
+    private var email = ""
+    private var fullname = ""
+    private var orderId : Long = 0
+    private lateinit var cartResp : CartsResponse
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +63,8 @@ class CartActivity : AppCompatActivity(), View.OnClickListener, RadioGroup.OnChe
         val userPreference = UserPreference(this)
         val user =  userPreference.getUser()
         userId = Integer.parseInt(user.id.toString())
+        email = user.email!!
+        fullname = user.fullname!!
         showData(userId)
         adapter.setOnItemClickCallback(object: CartAdapter.OnItemClickCallback {
             override fun onItemClicked(data: CartsDataItem, qty: Int, type: Method) {
@@ -81,12 +100,21 @@ class CartActivity : AppCompatActivity(), View.OnClickListener, RadioGroup.OnChe
             }
         })
         binding.btnPembayaran.setOnClickListener(this)
+        SdkUIFlowBuilder.init()
+            .setClientKey(Constants.CLIENT_KEY) // client_key is mandatory
+            .setContext(this) // context is mandatory
+            .setTransactionFinishedCallback { result -> transactionFinishedCallback(result) } // set transaction finish callback (sdk callback)
+            .setMerchantBaseUrl(Constants.BASE_URL) //set merchant url (required)
+            .enableLog(true) // enable sdk log (optional)
+            .setLanguage("id") //`en` for English and `id` for Bahasa
+            .buildSDK()
     }
 
     private fun showData(userId: Int) {
         viewModel.setCarts(userId)
-        viewModel.getCarts().observe(this){
+        viewModel.getCarts().observe(this@CartActivity){
             adapter.setData(it?.data?.data!! as List<CartsDataItem>)
+            cartResp = it
             if (it.data.data.isEmpty()) {
                 binding.txtTotalTagihan.text = "Keranjang Kosong"
             }else{
@@ -111,20 +139,55 @@ class CartActivity : AppCompatActivity(), View.OnClickListener, RadioGroup.OnChe
                 dialog.dismiss()
             }
             R.id.btn_bayar -> {
-                viewModel.setInsertTransaction(userId, receiverName.text.toString(), receiverPhone.text.toString(), receiverAddress.text.toString(), paymentType)
-                viewModel.getInsertTransaction().observe(this){
-                    if (it.errorMessage != "") {
-                        it.errorMessage?.let { it1 -> ToastHelper.showToast(this, it1) }
-                    }else if(it.data?.success == 0) {
-                        it.data.message?.let { it1 -> ToastHelper.showToast(this, it1) }
-                    }else{
-                        ToastHelper.showToast(this, "Transaksi Berhasil")
-                        startActivity(Intent(this@CartActivity, MainActivity::class.java))
-                        finish()
+                val orderIdStr : String = userId.toString() + System.currentTimeMillis().toString()
+                orderId = orderIdStr.toLong()
+                if (paymentType == "COD") {
+                    viewModel.setInsertTransaction(orderId, userId, receiverName.text.toString(), receiverPhone.text.toString(), receiverAddress.text.toString(), paymentType)
+                    viewModel.getInsertTransaction().observe(this@CartActivity){
+                        if (it.errorMessage != "") {
+                            it.errorMessage?.let { it1 -> ToastHelper.showToast(this, it1) }
+                        }else if(it.data?.success == 0) {
+                            it.data.message?.let { it1 -> ToastHelper.showToast(this, it1) }
+                        }else{
+//                            ToastHelper.showToast(this, "Transaksi Berhasil")
+//                            startActivity(Intent(this@CartActivity, MainActivity::class.java))
+//                            finish()
+                        }
                     }
+                    ToastHelper.showToast(this, "Transaksi Berhasil")
+                    startActivity(Intent(this@CartActivity, MainActivity::class.java))
+                    finish()
+                }else{
+                    val request: TransactionRequest = transactionRequest(orderIdStr)
+                    MidtransSDK.getInstance().transactionRequest = request
+                    MidtransSDK.getInstance().startPaymentUiFlow(this@CartActivity)
                 }
             }
         }
+    }
+
+    private fun transactionRequest(externalId: String): TransactionRequest {
+        val request = TransactionRequest(externalId,
+            cartResp.data?.totalTagihanNumeric!!.toDouble()
+        )
+        val customerDetails = CustomerDetails()
+        customerDetails.customerIdentifier = userId.toString()
+        customerDetails.email = email
+        customerDetails.firstName = receiverName.text.toString()
+        customerDetails.phone = receiverPhone.text.toString()
+        val shippingAddress = ShippingAddress()
+        shippingAddress.address = receiverAddress.text.toString()
+        customerDetails.shippingAddress = shippingAddress
+        val billingAddress = BillingAddress()
+        billingAddress.address = receiverAddress.text.toString()
+        customerDetails.billingAddress = billingAddress
+        val creditCard = CreditCard()
+        creditCard.isSaveCard = false
+        creditCard.authentication = Authentication.AUTH_3DS
+        request.creditCard = creditCard
+        request.setCustomerDetails(customerDetails)
+        request.orderId
+        return request
     }
 
     private fun showPopup() {
@@ -148,13 +211,62 @@ class CartActivity : AppCompatActivity(), View.OnClickListener, RadioGroup.OnChe
         when(v) {
             R.id.radio_button_1 -> {
                 paymentType = "COD"
-                ToastHelper.showToast(this, "COD")
                 //COD
             }
             R.id.radio_button_2 -> {
                 paymentType = "Manual Transfer"
-                ToastHelper.showToast(this, "Manual")
                 //Manual Transfer
+            }
+        }
+    }
+
+    fun transactionFinishedCallback(result: TransactionResult) {
+        if (result.response != null) {
+            when (result.status) {
+                TransactionResult.STATUS_SUCCESS -> {
+                    ToastHelper.showToast(this, "Transaksi Berhasil")
+                }
+                TransactionResult.STATUS_PENDING -> {
+                    viewModel.setInsertTransaction(orderId, userId, receiverName.text.toString(), receiverPhone.text.toString(), receiverAddress.text.toString(), paymentType)
+                    viewModel.getInsertTransaction().observe(this@CartActivity){
+                        if (it.errorMessage != "") {
+                            it.errorMessage?.let { it1 -> ToastHelper.showToast(this, it1) }
+                        }else if(it.data?.success == 0) {
+                            it.data.message?.let { it1 -> ToastHelper.showToast(this, it1) }
+                        }else{
+                            ToastHelper.showToast(this@CartActivity, "Transaksi Berhasil")
+                            startActivity(Intent(this@CartActivity, MainActivity::class.java))
+                            finish()
+                        }
+                    }
+                    ToastHelper.showToast(
+                        this,
+                        "Transaksi Berhasil - Menunggu Pembayaran "
+                    )
+                    startActivity(Intent(this@CartActivity, MainActivity::class.java))
+                    finish()
+                }
+                TransactionResult.STATUS_FAILED -> Toast.makeText(
+                    this,
+                    "Transaksi Gagal",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            result.response.validationMessages
+        } else if (result.isTransactionCanceled) {
+            ToastHelper.showToast(
+                this, "Transaksi Dibatalkan"
+            )
+        } else {
+            if (result.status.equals(TransactionResult.STATUS_INVALID, ignoreCase = true)) {
+                ToastHelper.showToast(
+                    this,
+                    "Transaksi Tidak Valid",
+                )
+            } else {
+                ToastHelper.showToast(
+                    this, "Ada yang tidak beres",
+                )
             }
         }
     }
