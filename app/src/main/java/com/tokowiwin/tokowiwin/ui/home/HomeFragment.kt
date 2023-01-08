@@ -49,6 +49,9 @@ class HomeFragment : Fragment() {
                 return false
             }
         })
+        if (user != null) {
+            binding.txtHeader.text = user.headerText
+        }
         adapter.setOnItemClickCallback(object : HomeAdapter.OnItemClickCallback {
             override fun onItemClicked(data: ProductsDataItem, qty: Int) {
                 if (qty == 0) {

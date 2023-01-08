@@ -3,6 +3,7 @@ package com.tokowiwin.tokowiwin.ui.detail
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.tokowiwin.tokowiwin.data.local.UserPreference
 import com.tokowiwin.tokowiwin.data.remote.response.TransactionProductsItem
 import com.tokowiwin.tokowiwin.databinding.ActivityDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,12 +32,17 @@ class DetailActivity : AppCompatActivity() {
         val detailBill = intent.getStringExtra(EXTRA_DETAIL_BILL)
         val products = intent.getParcelableArrayListExtra<TransactionProductsItem>(
             EXTRA_DETAIL_PRODUCTS)
+
+        val userPreference = UserPreference(this)
+        val user =  userPreference.getUser()
+
         binding.let{
             it.txtNamaPenerima.text = detailName
             it.txtNomorHp.text = detailPhone
             it.txtAlamatPengiriman.text = detailAddress
             it.txtJenisPembayaran.text = detailPaymentType
             it.txtTotalTagihan.text = detailBill
+            it.txtHeader.text = user.headerText
         }
         setupRv()
         products?.let { adapter.setData(it) }

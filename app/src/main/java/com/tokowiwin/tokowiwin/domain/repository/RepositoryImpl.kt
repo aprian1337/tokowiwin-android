@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.tokowiwin.tokowiwin.data.NetworkDataSource
 import com.tokowiwin.tokowiwin.data.Resource
 import com.tokowiwin.tokowiwin.data.remote.response.*
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -12,6 +13,7 @@ import javax.inject.Inject
 class RepositoryImpl @Inject constructor(
     private val networkDataSource : NetworkDataSource,
 ) : Repository {
+    @OptIn(DelicateCoroutinesApi::class)
     override fun login(username: String, password: String): LiveData<LoginResponse> {
         val result = MutableLiveData<LoginResponse>()
         GlobalScope.launch {
@@ -24,6 +26,7 @@ class RepositoryImpl @Inject constructor(
         return result
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun register(
         name: String,
         username: String,
@@ -40,6 +43,7 @@ class RepositoryImpl @Inject constructor(
         return result
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun changePass(
         email: String,
         oldPass: String,
@@ -56,6 +60,7 @@ class RepositoryImpl @Inject constructor(
         return result
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun getProducts(): LiveData<ProductsResponse> {
         val result = MutableLiveData<ProductsResponse>()
         GlobalScope.launch {
@@ -71,6 +76,7 @@ class RepositoryImpl @Inject constructor(
         return result
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun addCart(userId: Int, productId: Int, qty: Int): LiveData<AddCartResponse> {
         val result = MutableLiveData<AddCartResponse>()
         GlobalScope.launch {
@@ -83,6 +89,7 @@ class RepositoryImpl @Inject constructor(
         return result
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun carts(userId: Int): LiveData<CartsResponse> {
         val result = MutableLiveData<CartsResponse>()
         GlobalScope.launch {
@@ -95,6 +102,7 @@ class RepositoryImpl @Inject constructor(
         return result
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun deleteCart(userId: Int, productId: Int): LiveData<DeleteCartResponse> {
         val result = MutableLiveData<DeleteCartResponse>()
         GlobalScope.launch {
@@ -107,6 +115,7 @@ class RepositoryImpl @Inject constructor(
         return result
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun updateCart(userId: Int, productId: Int, qty: Int): LiveData<UpdateCartResponse> {
         val result = MutableLiveData<UpdateCartResponse>()
         GlobalScope.launch {
@@ -118,6 +127,7 @@ class RepositoryImpl @Inject constructor(
         }
         return result    }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun insertTransaction(
         id: Long,
         userId: Int,
@@ -137,6 +147,7 @@ class RepositoryImpl @Inject constructor(
         return result
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun transactions(userId: Int): LiveData<TransactionsResponse> {
         val result = MutableLiveData<TransactionsResponse>()
         GlobalScope.launch {

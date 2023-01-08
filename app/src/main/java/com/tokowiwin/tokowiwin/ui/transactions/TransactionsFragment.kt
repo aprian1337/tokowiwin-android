@@ -28,7 +28,7 @@ class TransactionsFragment : Fragment(), View.OnClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentTransactionsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -49,6 +49,7 @@ class TransactionsFragment : Fragment(), View.OnClickListener {
         }
 
         binding.imgCart.setOnClickListener(this)
+        user?.headerText.also { binding.txtHeader.text = it }
         adapter.setOnItemClickCallback(object: TransactionsAdapter.OnItemClickCallback {
             override fun onItemClicked(data: TransactionDetails) {
                 startActivity(

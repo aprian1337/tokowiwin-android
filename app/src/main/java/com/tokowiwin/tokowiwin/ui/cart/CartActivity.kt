@@ -99,6 +99,7 @@ class CartActivity : AppCompatActivity(), View.OnClickListener, RadioGroup.OnChe
                 }
             }
         })
+        binding.txtHeader.text = user.headerText
         binding.btnPembayaran.setOnClickListener(this)
         SdkUIFlowBuilder.init()
             .setClientKey(Constants.CLIENT_KEY) // client_key is mandatory

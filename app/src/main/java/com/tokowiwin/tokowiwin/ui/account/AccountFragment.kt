@@ -44,9 +44,7 @@ class AccountFragment : Fragment() {
                 }
             }
             b.imgCart.setOnClickListener{
-                Intent(activity, CartActivity::class.java).let {
-                    startActivity(it)
-                }
+                startActivity(Intent(activity, CartActivity::class.java))
             }
         }
     }

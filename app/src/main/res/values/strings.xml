@@ -42,4 +42,5 @@
     <string name="nama_penerima">Nama Penerima</string>
     <string name="nomor_hp_penerima">Nomor HP Penerima</string>
     <string name="alamat_pengiriman">Alamat Pengiriman</string>
+    <string name="header_name">Header Name</string>
 </resources>

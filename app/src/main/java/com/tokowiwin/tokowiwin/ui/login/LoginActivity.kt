@@ -64,7 +64,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             if (it.data?.user != null) {
-                userPreference.setUser(it.data.user, AuthType.LOGIN)
+                userPreference.setUser(it.data.user, AuthType.LOGIN, it.data.headerText!!)
                 Intent(this@LoginActivity, MainActivity::class.java).apply {
                     startActivity(this)
                     finish()
