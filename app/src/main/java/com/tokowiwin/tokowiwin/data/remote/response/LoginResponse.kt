@@ -25,6 +25,9 @@ data class LoginData(
     @field:SerializedName("message")
     val message: String? = null,
 
+    @field:SerializedName("header_text")
+    val headerText: String? = null,
+
     @field:SerializedName("user")
     val user: LoginUser? = null
 )
